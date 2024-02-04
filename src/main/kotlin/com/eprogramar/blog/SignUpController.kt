@@ -37,6 +37,6 @@ class SignUpController(private val repository: UserRepository) {
 
         repository.save(user).also { logger.info(it.toString()) }
 
-        return "redirect:/"
+        return "redirect:/login"
     }
 }
