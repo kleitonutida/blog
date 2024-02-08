@@ -69,7 +69,9 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">Perfil</a>
-                        <a class="dropdown-item" href="#">Novo Artigo</a>
+                        <a class="dropdown-item" href="article.html" th:href="@{/article}">
+                            Novo Artigo
+                        </a>
                         <a class="dropdown-item" href="#">Meus Artigos</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="login.html" th:href="@{/login/logout}">
@@ -93,6 +95,15 @@
         <div class="col-md-6 px-0">
             <h1 class="display-4 font-italic" th:text="#{blog.title}">Blog Title</h1>
             <p class="lead my-3" th:text="#{blog.subTitle}">Blog Sub Title.</p>
+        </div>
+    </div>
+
+    <div th:if="${messageSuccess != null}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${messageSuccess}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
     </div>
 </div>
