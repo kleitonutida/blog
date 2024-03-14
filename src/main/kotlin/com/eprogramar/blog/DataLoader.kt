@@ -1,8 +1,6 @@
 package com.eprogramar.blog
 
 import net.datafaker.Faker
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Configuration
 import java.time.LocalDateTime
@@ -14,7 +12,7 @@ class DataLoader(
     private val articleRepository: ArticleRepository,
     private val authorRepository: AuthorRepository,
 ) : CommandLineRunner {
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
+    private val faker = Faker()
 
     override fun run(vararg args: String?) {
         run {
@@ -26,8 +24,19 @@ class DataLoader(
 
     private fun loadUser() =
         userRepository.count().takeIf { it == 0L }?.let {
-            userRepository.save(User(name = "Administrator", email = "admin@blog.com", password = "admin"))
-                .also { logger.info(it.toString()) }
+            val users = mutableListOf<User>()
+            users.add(
+                User(name = "Administrator", email = "admin@blog.com", password = "admin"),
+            )
+            users.add(
+                User(
+                    name = faker.name().firstName(),
+                    email = faker.internet().emailAddress(),
+                    password = faker.internet().password(),
+                ),
+            )
+
+            userRepository.saveAll(users)
         }
 
     private fun loadCategories() =
@@ -53,11 +62,29 @@ class DataLoader(
 
     private fun loadArticles() =
         articleRepository.count().takeIf { it == 0L }?.let {
-            val user = userRepository.findAll()[0]
-            val author = authorRepository.save(Author(user = user))
+            val user = userRepository.findAll()
+
+            val author =
+                authorRepository.saveAll(
+                    listOf(
+                        Author(
+                            user = user[0],
+                            about = faker.lorem().sentence(),
+                            facebook = "https://facebook.com/administrator",
+                            twitter = "https://twitter.com/administrator",
+                            linkedIn = "https://linkedin.com/administrator",
+                        ),
+                        Author(
+                            user = user[1],
+                            about = faker.lorem().sentence(),
+                            facebook = "https://facebook.com/${user[1].name.lowercase()}",
+                            twitter = "https://twitter.com/${user[1].name.lowercase()}",
+                            linkedIn = "https://linkedin.com/${user[1].name.lowercase()}",
+                        ),
+                    ),
+                )
 
             val articles = mutableListOf<Article>()
-            val faker = Faker()
 
             for (i in 1..10) {
                 articles.add(
@@ -66,11 +93,11 @@ class DataLoader(
                         subTitle = faker.lorem().sentence(8),
                         content = faker.lorem().sentence(20),
                         date = LocalDateTime.now(),
-                        author = author,
+                        author = if (i % 2 == 0) author[0] else author[1],
                     ),
                 )
             }
 
-            articles.also { articleRepository.saveAll(it) }
+            articleRepository.saveAll(articles)
         }
 }

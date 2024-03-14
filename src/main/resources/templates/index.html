@@ -147,28 +147,29 @@
         <aside class="col-md-4 blog-sidebar">
             <div class="p-4 mb-3 bg-light rounded">
                 <h4 class="font-italic">
-                    <i class="fas fa-user"></i> <span th:text="#{author.about}">About Author</span>
+                    <i class="fas fa-user"></i>
+<!--                    <span th:text="#{author.about}">About Author</span>-->
+                    <span th:text="${author.user.name}">Name Author</span>
                 </h4>
-                <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus
-                    sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+                <p class="mb-0" th:text="${author.about}">About Content.</p>
                 <hr/>
                 <h4 class="font-italic">
                     <i class="fas fa-network-wired"></i> <span th:text="#{author.network}">Social Network</span>
                 </h4>
                 <ol class="list-unstyled">
                     <li>
-                        <a href="#">
-                            <i class="fab fa-facebook-f"></i> Facebook
+                        <a href="#" th:href="${author.facebook}">
+                            <i class="fab fa-facebook-f"></i> <span class="text-secondary" th:text="${author.facebook}"></span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="fab fa-twitter"></i> Twitter
+                        <a href="#" th:href="${author.twitter}">
+                            <i class="fab fa-twitter"></i> <span class="text-secondary" th:text="${author.twitter}"></span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="fab fa-linkedin"></i> LinkedIn
+                        <a href="#" th:href="${author.linkedIn}">
+                            <i class="fab fa-linkedin-in"></i> <span class="text-secondary" th:text="${author.linkedIn}"></span>
                         </a>
                     </li>
                 </ol>

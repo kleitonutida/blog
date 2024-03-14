@@ -14,4 +14,8 @@ data class Author(
 
     @OneToOne
     val user: User = User(),
+
+    var facebook: String = "",
+    var twitter: String = "",
+    var linkedIn: String = "",
 )
