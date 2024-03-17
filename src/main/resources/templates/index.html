@@ -133,10 +133,10 @@
                         Autor: <span th:text="${article.author.user.name}">Author</span>
                     </div>
                     <div class="badge badge-secondary">
-                        Data: <span th:text="${#temporals.format(article.date, 'dd/MM/yyyy HH:mm:ss')}">Data de criação</span>
+                        Data: <span th:text="${#temporals.format(article.date, 'dd/MM/yyyy HH:mm:ss')}">Data Create</span>
                     </div>
-                    <div class="badge badge-secondary">
-                        Data: <span th:text="${article.category.name}">Categoria</span>
+                    <div class="badge badge-secondary float-right">
+                        Categoria: <span th:text="${article.category.name}">Category</span>
                     </div>
                 </div>
             </div><!-- /.blog-post -->

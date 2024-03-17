@@ -25,6 +25,7 @@ class ArticleController(
     fun form(model: Model): String {
         logger.info("Article form")
         model.addAttribute("article", Article())
+        model.addAttribute("categories", categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name")))
         return "article"
     }
 
