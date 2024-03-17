@@ -55,4 +55,11 @@ class ArticleController(
 
         return "redirect:/"
     }
+
+    @GetMapping("/list")
+    fun list(model: Model): String {
+        logger.info("List articles")
+        model.addAttribute("articles", articleRepository.findAll())
+        return "article-list"
+    }
 }
