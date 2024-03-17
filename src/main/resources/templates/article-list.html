@@ -100,7 +100,12 @@
             <h5 class="card-title text-muted" th:text="${article.subTitle}">Sub Title</h5>
             <p th:text="${article.content}">Content</p>
 
-
+            <a href="article.html"
+                class="btn btn-light btn-small"
+                th:href="@{/article/edit/{id}(id=${article.id})}"
+                th:if="${session.currentUser.id == article.author.user.id}">
+                <i class="fas fa-edit"></i>
+            </a>
         </div>
 
         <div class="card-footer text-muted">

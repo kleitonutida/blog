@@ -91,4 +91,15 @@ class ArticleController(
         model.addAttribute("categories", categoryRepository.findAll())
         return "article-list"
     }
+
+    @GetMapping("/edit/{id}")
+    fun edit(
+        @PathVariable id: Long,
+        model: Model,
+    ): String {
+        logger.info("Edit article id: $id")
+        model.addAttribute("article", articleRepository.findById(id).get())
+        model.addAttribute("categories", categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name")))
+        return "article"
+    }
 }
