@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
@@ -62,6 +63,18 @@ class ArticleController(
     fun list(model: Model): String {
         logger.info("List articles")
         model.addAttribute("articles", articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id")))
+        model.addAttribute("categories", categoryRepository.findAll())
+        return "article-list"
+    }
+
+    @GetMapping("/list/user/{id}")
+    fun listByAuthor(
+        @PathVariable id: Long,
+        model: Model,
+    ): String {
+        logger.info("List articles by user")
+        val sort = Sort.by(Sort.Direction.DESC, "id")
+        model.addAttribute("articles", articleRepository.findByAuthorUserId(id, sort))
         model.addAttribute("categories", categoryRepository.findAll())
         return "article-list"
     }
