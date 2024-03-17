@@ -10,4 +10,9 @@ interface ArticleRepository : JpaRepository<Article, Long> {
         id: Long,
         sort: Sort,
     ): List<Article>
+
+    fun findByCategoryId(
+        id: Long,
+        sort: Sort,
+    ): List<Article>
 }

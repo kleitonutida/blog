@@ -63,6 +63,7 @@ class DataLoader(
     private fun loadArticles() =
         articleRepository.count().takeIf { it == 0L }?.let {
             val user = userRepository.findAll()
+            val categories = categoryRepository.findAll()
 
             val author =
                 authorRepository.saveAll(
@@ -94,6 +95,7 @@ class DataLoader(
                         content = faker.lorem().sentence(20),
                         date = LocalDateTime.now(),
                         author = if (i % 2 == 0) author[0] else author[1],
+                        category = categories[(0..<categories.size).random()],
                     ),
                 )
             }
