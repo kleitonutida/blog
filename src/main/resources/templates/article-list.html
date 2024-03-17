@@ -33,8 +33,78 @@
 </head>
 <body class="container">
 
-<div class="jumbotron">
-    <h1>Artigos</h1>
+<header class="blog-header py-3">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-4 pt-1">
+            <a class="text-muted" href="signup.html" th:href="@{/signup}" th:if="${session.currentUser == null}">
+                <i class="fas fa-id-card"></i> <span th:text="#{blog.subscribe}">Subscribe</span>
+            </a>
+        </div>
+        <div class="col-4 text-center">
+            <!-- <a class="blog-header-logo text-dark" href="#">Large</a> -->
+            <img src="../static/images/blog-logo.png" th:src="@{/images/blog-logo.png}" alt="Logo" height="50px"/>
+        </div>
+        <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="btn btn-sm btn-outline-secondary" href="login.html" th:href="@{/login}"
+               th:if="${session.currentUser == null}">
+                <i class="fas fa-sign-in-alt"></i> <span th:text="#{blog.signin}">Sign in</span>
+            </a>
+            <div class="dropdown" th:if="${session.currentUser != null}">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span th:text="${session.currentUser.name}"></span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Perfil</a>
+                    <a class="dropdown-item" href="article.html" th:href="@{/article}">
+                        Novo Artigo
+                    </a>
+                    <a class="dropdown-item" href="#">Meus Artigos</a>
+                    <a class="dropdown-item" href="articles-list.html" th:href="@{/article/list}">Todos Artigos</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="login.html" th:href="@{/login/logout}">
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="nav-scroller py-1 mb-2">
+    <nav class="nav d-flex justify-content-between">
+        <a class="p-2 text-muted" href="#" th:each="category: ${categories}">
+            <span th:text="${category.name}">Technology</span>
+        </a>
+    </nav>
+</div>
+
+<div class="jumbotron text-white bg-dark text-center">
+    <h1 class="font-italic">Artigos</h1>
+    <a href="article.html" class="btn btn-success" th:href="@{/article}">Novo Artigo</a>
+</div>
+
+<div th:each="article : ${articles}">
+    <div class="blog-post card">
+
+        <h1 class="blog-post-title card-header" th:text="${article.title}">
+            Sample blog post
+        </h1>
+
+        <div class="card-body">
+            <h5 class="card-title text-muted" th:text="${article.subTitle}">Sub Title</h5>
+            <p th:text="${article.content}">Content.</p>
+        </div>
+
+        <div class="card-footer text-muted">
+            <div class="badge badge-secondary">
+                Autor: <span th:text="${article.author.user.name}">Author</span>
+            </div>
+            <div class="badge badge-secondary">
+                Data: <span th:text="${#temporals.format(article.date, 'dd/MM/yyyy HH:mm:ss')}">Data de criação</span>
+            </div>
+        </div>
+    </div><!-- /.blog-post -->
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

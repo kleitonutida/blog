@@ -2,6 +2,7 @@ package com.eprogramar.blog
 
 import jakarta.servlet.http.HttpSession
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,6 +16,7 @@ import java.time.LocalDateTime
 class ArticleController(
     private val articleRepository: ArticleRepository,
     private val authorRepository: AuthorRepository,
+    private val categoryRepository: CategoryRepository,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -59,7 +61,8 @@ class ArticleController(
     @GetMapping("/list")
     fun list(model: Model): String {
         logger.info("List articles")
-        model.addAttribute("articles", articleRepository.findAll())
+        model.addAttribute("articles", articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id")))
+        model.addAttribute("categories", categoryRepository.findAll())
         return "article-list"
     }
 }
