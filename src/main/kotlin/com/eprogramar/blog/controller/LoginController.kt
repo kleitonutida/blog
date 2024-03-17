@@ -1,7 +1,7 @@
 package com.eprogramar.blog.controller
 
 import com.eprogramar.blog.model.User
-import com.eprogramar.blog.repository.UserRepository
+import com.eprogramar.blog.service.UserService
 import jakarta.servlet.http.HttpSession
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/login")
-class LoginController(private val repository: UserRepository) {
+class LoginController(private val userService: UserService) {
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping
@@ -31,7 +31,7 @@ class LoginController(private val repository: UserRepository) {
     ): String {
         logger.info("[login] Login user: $user")
 
-        repository.findByEmail(user.email).orElse(null).let {
+        userService.findByEmail(user.email).orElse(null).let {
             when {
                 it == null -> {
                     val messageError = "Usuário não encontrado!"

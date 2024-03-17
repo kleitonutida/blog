@@ -1,11 +1,9 @@
 package com.eprogramar.blog.controller
 
 import com.eprogramar.blog.model.Article
-import com.eprogramar.blog.model.Author
 import com.eprogramar.blog.model.User
-import com.eprogramar.blog.repository.ArticleRepository
-import com.eprogramar.blog.repository.AuthorRepository
-import com.eprogramar.blog.repository.CategoryRepository
+import com.eprogramar.blog.service.ArticleService
+import com.eprogramar.blog.service.CategoryService
 import jakarta.servlet.http.HttpSession
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
@@ -16,14 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/article")
 class ArticleController(
-    private val articleRepository: ArticleRepository,
-    private val authorRepository: AuthorRepository,
-    private val categoryRepository: CategoryRepository,
+    private val articleService: ArticleService,
+    private val categoryService: CategoryService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -31,7 +27,7 @@ class ArticleController(
     fun form(model: Model): String {
         logger.info("Article form")
         model.addAttribute("article", Article())
-        model.addAttribute("categories", categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name")))
+        model.addAttribute("categories", categoryService.findAll())
         return "article"
     }
 
@@ -42,35 +38,24 @@ class ArticleController(
         redirectAttributes: RedirectAttributes,
     ): String {
         logger.info("Saving article: $article")
-        val currentUser = session.getAttribute("currentUser") as User
-        val author =
-            authorRepository.findByUserId(currentUser.id).let { author ->
-                if (author.isPresent) {
-                    author.get()
-                } else {
-                    val newAuthor = Author(user = currentUser)
-                    authorRepository.save(newAuthor).also { logger.info("Autor criado com sucesso!") }
-                }
-            }
 
-        article.author = author
-        article.date = LocalDateTime.now()
-        articleRepository.save(article)
+        val currentUser = session.getAttribute("currentUser") as User
+
+        articleService.save(article, currentUser)
 
         val messageSuccess = "Artigo criado com sucesso!"
-        logger.info(messageSuccess)
-
         // Adiciona um atributo na sessão para ser usado na próxima requisição, ele é removido da sessão após ser usado
         redirectAttributes.addFlashAttribute("messageSuccess", messageSuccess)
 
+        logger.info(messageSuccess)
         return "redirect:/"
     }
 
     @GetMapping("/list")
     fun list(model: Model): String {
         logger.info("List articles")
-        model.addAttribute("articles", articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id")))
-        model.addAttribute("categories", categoryRepository.findAll())
+        model.addAttribute("articles", articleService.findAll())
+        model.addAttribute("categories", categoryService.findAll())
         return "article-list"
     }
 
@@ -81,8 +66,8 @@ class ArticleController(
     ): String {
         logger.info("List articles by user id: $id")
         val sort = Sort.by(Sort.Direction.DESC, "id")
-        model.addAttribute("articles", articleRepository.findByAuthorUserId(id, sort))
-        model.addAttribute("categories", categoryRepository.findAll())
+        model.addAttribute("articles", articleService.findByAuthorUserId(id, sort))
+        model.addAttribute("categories", categoryService.findAll())
         return "article-list"
     }
 
@@ -93,8 +78,8 @@ class ArticleController(
     ): String {
         logger.info("List articles by category id: $id")
         val sort = Sort.by(Sort.Direction.DESC, "id")
-        model.addAttribute("articles", articleRepository.findByCategoryId(id, sort))
-        model.addAttribute("categories", categoryRepository.findAll())
+        model.addAttribute("articles", articleService.findByCategoryId(id, sort))
+        model.addAttribute("categories", categoryService.findAll())
         return "article-list"
     }
 
@@ -104,8 +89,8 @@ class ArticleController(
         model: Model,
     ): String {
         logger.info("Edit article id: $id")
-        model.addAttribute("article", articleRepository.findById(id).get())
-        model.addAttribute("categories", categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name")))
+        model.addAttribute("article", articleService.findById(id))
+        model.addAttribute("categories", categoryService.findAll())
         return "article"
     }
 
@@ -115,7 +100,7 @@ class ArticleController(
         model: Model,
     ): String {
         logger.info("Delete article id: $id")
-        articleRepository.deleteById(id)
+        articleService.deleteById(id)
         return "redirect:/article/list"
     }
 }
