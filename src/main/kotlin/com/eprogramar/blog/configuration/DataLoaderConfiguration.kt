@@ -1,12 +1,20 @@
-package com.eprogramar.blog
+package com.eprogramar.blog.configuration
 
+import com.eprogramar.blog.model.Article
+import com.eprogramar.blog.model.Author
+import com.eprogramar.blog.model.Category
+import com.eprogramar.blog.model.User
+import com.eprogramar.blog.repository.ArticleRepository
+import com.eprogramar.blog.repository.AuthorRepository
+import com.eprogramar.blog.repository.CategoryRepository
+import com.eprogramar.blog.repository.UserRepository
 import net.datafaker.Faker
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Configuration
 import java.time.LocalDateTime
 
 @Configuration
-class DataLoader(
+class DataLoaderConfiguration(
     private val userRepository: UserRepository,
     private val categoryRepository: CategoryRepository,
     private val articleRepository: ArticleRepository,

@@ -1,4 +1,4 @@
-package com.eprogramar.blog
+package com.eprogramar.blog.model
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

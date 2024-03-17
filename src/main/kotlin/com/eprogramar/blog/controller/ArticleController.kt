@@ -1,5 +1,11 @@
-package com.eprogramar.blog
+package com.eprogramar.blog.controller
 
+import com.eprogramar.blog.model.Article
+import com.eprogramar.blog.model.Author
+import com.eprogramar.blog.model.User
+import com.eprogramar.blog.repository.ArticleRepository
+import com.eprogramar.blog.repository.AuthorRepository
+import com.eprogramar.blog.repository.CategoryRepository
 import jakarta.servlet.http.HttpSession
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort

@@ -1,5 +1,7 @@
-package com.eprogramar.blog
+package com.eprogramar.blog.controller
 
+import com.eprogramar.blog.model.User
+import com.eprogramar.blog.repository.UserRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller

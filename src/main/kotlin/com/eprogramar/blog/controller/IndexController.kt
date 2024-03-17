@@ -1,5 +1,7 @@
-package com.eprogramar.blog
+package com.eprogramar.blog.controller
 
+import com.eprogramar.blog.repository.ArticleRepository
+import com.eprogramar.blog.repository.CategoryRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
