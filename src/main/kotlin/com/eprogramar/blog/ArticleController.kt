@@ -102,4 +102,14 @@ class ArticleController(
         model.addAttribute("categories", categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name")))
         return "article"
     }
+
+    @GetMapping("/delete/{id}")
+    fun delete(
+        @PathVariable id: Long,
+        model: Model,
+    ): String {
+        logger.info("Delete article id: $id")
+        articleRepository.deleteById(id)
+        return "redirect:/article/list"
+    }
 }

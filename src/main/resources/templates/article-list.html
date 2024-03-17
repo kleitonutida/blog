@@ -61,7 +61,7 @@
                     <a class="dropdown-item" href="article.html" th:href="@{/article}">
                         Novo Artigo
                     </a>
-                    <a class="dropdown-item" href="#">Meus Artigos</a>
+                    <a class="dropdown-item" href="articles-list.html" th:href="@{/article/list/user/{id}(id=${session.currentUser.id})}">Meus Artigos</a>
                     <a class="dropdown-item" href="articles-list.html" th:href="@{/article/list}">Todos Artigos</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="login.html" th:href="@{/login/logout}">
@@ -105,6 +105,13 @@
                 th:href="@{/article/edit/{id}(id=${article.id})}"
                 th:if="${session.currentUser.id == article.author.user.id}">
                 <i class="fas fa-edit"></i>
+            </a>
+
+            <a href="article.html"
+                class="btn btn-light btn-small"
+                th:href="@{/article/delete/{id}(id=${article.id})}"
+                th:if="${session.currentUser.id == article.author.user.id}">
+                <i class="fas fa-trash-alt text-danger"></i>
             </a>
         </div>
 
